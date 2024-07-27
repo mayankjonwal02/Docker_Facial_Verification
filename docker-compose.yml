@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    build: ./Mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: UserDatabase
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend_network
+
+  web:
+    build: ./libraryproject
+    command: ["sh", "-c", "python manage.py migrate && python manage.py runsslserver 0.0.0.0:8000"]
+    volumes:
+      - ./libraryproject:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=UserDatabase
+      - DB_USER=root
+      - DB_PASS=
+    networks:
+      - backend_network
+
+volumes:
+  mysql_data:
+
+networks:
+  backend_network:
