@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   db:
-    build: ./Mysql
     image: mayankjonwal02/iitj_face_verification_backend-db
     ports:
       - "3306:3306"
@@ -15,7 +14,6 @@ services:
       - backend_network
 
   frontalface:
-    build: ./FaceOrientationBackend
     image: mayankjonwal02/iitj_face_verification_backend-frontalface
     ports:
       - "8001:8001"
@@ -23,7 +21,6 @@ services:
       - backend_network
 
   web:
-    build: ./libraryproject
     image: mayankjonwal02/iitj_face_verification_backend-web
     command: ["sh", "-c", "python manage.py migrate && gunicorn libraryproject.wsgi:application --bind 0.0.0.0:8000"]
     volumes:
