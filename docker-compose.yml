@@ -13,6 +13,14 @@ services:
     networks:
       - backend_network
 
+  frontalface:
+    build: ./FaceOrientationBackend
+    ports:
+      - "8001:8001"
+
+    networks:
+      - backend_network
+
   web:
     build: ./libraryproject
     command: ["sh", "-c", "python manage.py migrate && python manage.py runsslserver 0.0.0.0:8000"]
@@ -22,6 +30,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - frontalface
     environment:
       - DB_HOST=db
       - DB_NAME=UserDatabase
