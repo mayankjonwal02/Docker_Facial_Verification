@@ -22,7 +22,7 @@ services:
 
   web:
     image: mayankjonwal02/iitj_face_verification_backend-web
-    command: ["sh", "-c", "python manage.py migrate && gunicorn libraryproject.wsgi:application --bind 0.0.0.0:8000"]
+    command: ["sh", "-c", "python manage.py migrate && gunicorn libraryproject.wsgi:application --bind 0.0.0.0:8000 --timeout 120"]
     volumes:
       - ./libraryproject:/app
     depends_on:

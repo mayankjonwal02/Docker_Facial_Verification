@@ -12,7 +12,7 @@ services:
     build: ./libraryproject
     image: mayankjonwal02/iitj_face_verification_backend-web
     container_name: web
-    command: ["sh", "-c", "python manage.py migrate && gunicorn libraryproject.wsgi:application --bind 0.0.0.0:8000"]
+    command: ["sh", "-c", "python manage.py migrate && gunicorn libraryproject.wsgi:application --bind 0.0.0.0:8000 --timeout 120"]
     volumes:
       - ./libraryproject:/app
     depends_on:
@@ -22,6 +22,9 @@ services:
       - DB_NAME=UserDatabase
       - DB_USER=myuser
       - DB_PASS=mypassword
+    
+    ports:
+      - "8000:8000"
     networks:
       - backend_network
 
@@ -34,6 +37,23 @@ services:
       - "8003:8003"
     depends_on:
       - web
+    networks:
+      - backend_network
+
+  db:
+    build: ./Mysql
+    image: mayankjonwal02/iitj_face_verification_backend-db
+    container_name: db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: myuser
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: UserDatabase
+      MYSQL_PASSWORD: mypassword
+      
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - backend_network
 
